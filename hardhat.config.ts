@@ -4,6 +4,11 @@ import '@nomiclabs/hardhat-waffle'
 import 'hardhat-typechain'
 import 'hardhat-watcher'
 
+// For WSL2 users, you may need to set a proxy agent to connect to the internet
+// import { ProxyAgent, setGlobalDispatcher } from 'undici';
+// const proxyAgent = new ProxyAgent("http://172.29.32.1:55315"); // replace ip with cat /etc/resolv.conf | grep nameserver
+// setGlobalDispatcher(proxyAgent);
+
 const LOW_OPTIMIZER_COMPILER_SETTINGS = {
   version: '0.7.6',
   settings: {
@@ -78,11 +83,27 @@ export default {
     optimism: {
       url: `https://optimism-mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
     },
+    taiko: {
+      url: `https://rpc.mainnet.taiko.xyz`,
+    },
   },
   etherscan: {
     // Your API key for Etherscan
     // Obtain one at https://etherscan.io/
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: {
+      sepolia: 'VV6FB3HDE9FSVBBVMVXGPQX4KSJUJIY3E6',
+      taiko: process.env.TAIKO_API_KEY ?? "TS7QMPR8GZCV9RJM4ZGV4HCRE9RMFF48UV",
+    },
+    customChains: [
+      {
+        network: "taiko",
+        chainId: 167000,
+        urls: {
+          apiURL: "https://api.taikoscan.io/api",
+          browserURL: "https://taikoscan.io",
+        },
+      },
+    ]
   },
   solidity: {
     compilers: [DEFAULT_COMPILER_SETTINGS],
